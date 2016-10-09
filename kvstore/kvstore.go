@@ -18,11 +18,11 @@ func main() {
 }
 
 // Init the kv-store
-func (t *KVStore) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *KVStore) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	return nil, nil
 }
 
-func (t *KVStore) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *KVStore) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 
 	if function == "write" {
 		return t.write(stub, args)
@@ -33,7 +33,7 @@ func (t *KVStore) Invoke(stub shim.ChaincodeStubInterface, function string, args
 	return nil, errors.New("Received unknown function invocation")
 }
 
-func (t *KVStore) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+func (t *KVStore) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("query is running " + function)
 
 	if function == "read" {
@@ -43,7 +43,7 @@ func (t *KVStore) Query(stub shim.ChaincodeStubInterface, function string, args 
 	return nil, errors.New("Received unknown function query")
 }
 
-func (t *KVStore) write(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *KVStore) write(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var key, value string
 	var err error
 
@@ -60,7 +60,7 @@ func (t *KVStore) write(stub shim.ChaincodeStubInterface, args []string) ([]byte
 	return nil, nil
 }
 
-func (t *KVStore) del(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *KVStore) del(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var key string
 	var err error
 
@@ -76,7 +76,7 @@ func (t *KVStore) del(stub shim.ChaincodeStubInterface, args []string) ([]byte, 
 	return nil, nil
 }
 
-func (t *KVStore) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+func (t *KVStore) read(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
 	var key, jsonResp string
 	var err error
 
