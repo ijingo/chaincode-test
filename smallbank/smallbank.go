@@ -24,11 +24,13 @@ func main() {
 }
 
 func (t *SmallBank) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	for i := 0; i < MAX_ACCOUNTS; i++ {
-		stub.PutState(accountTab+"_"+strconv.Itoa(i), []byte("name_"+strconv.Itoa(i)))
-		stub.PutState(savingTab+"_"+strconv.Itoa(i), []byte(strconv.Itoa(BALANCE)))
-		stub.PutState(checkingTab+"_"+strconv.Itoa(i), []byte(strconv.Itoa(BALANCE)))
-	}
+	/*
+		for i := 0; i < MAX_ACCOUNTS; i++ {
+			stub.PutState(accountTab+"_"+strconv.Itoa(i), []byte("name_"+strconv.Itoa(i)))
+			stub.PutState(savingTab+"_"+strconv.Itoa(i), []byte(strconv.Itoa(BALANCE)))
+			stub.PutState(checkingTab+"_"+strconv.Itoa(i), []byte(strconv.Itoa(BALANCE)))
+		}
+	*/
 
 	return nil, nil
 }
