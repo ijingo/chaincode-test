@@ -36,15 +36,17 @@ func (t *SmallBank) Init(stub shim.ChaincodeStubInterface, function string, args
 
 func (t *SmallBank) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 
-	if function == "updateBalance" {
-		return t.updateBalance(stub, args)
-	} else {
-		return nil, nil
-	}
+	/*
+		if function == "updateBalance" {
+			return t.updateBalance(stub, args)
+		} else {
+			return nil, nil
+		}
 
-	return nil, errors.New("Received unknown function invocation")
+	*/
+	return nil, nil
+
 }
-
 func (t *SmallBank) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	valAsbytes, err := stub.GetState(args[0])
 	return valAsbytes, err
