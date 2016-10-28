@@ -67,15 +67,15 @@ func (t *SmallBank) almagate(stub shim.ChaincodeStubInterface, args []string) ([
 	}
 	bal_str1, err1 = stub.GetState(accountTab + "_" + args[1])
 	if err1 != nil {
-		stub.PutState(accountTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
+		stub.PutState(accountTab+"_"+args[1], []byte(strconv.Itoa(BALANCE)))
 	}
 	bal_str2, err2 = stub.GetState(checkingTab + "_" + args[1])
 	if err2 != nil {
-		stub.PutState(checkingTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
+		stub.PutState(checkingTab+"_"+args[1], []byte(strconv.Itoa(BALANCE)))
 	}
 	_, err3 = stub.GetState(savingTab + "_" + args[0])
 	if err3 != nil {
-		stub.PutState(savingTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
+		stub.PutState(savingTab+"_"+args[1], []byte(strconv.Itoa(BALANCE)))
 	}
 
 	var bal1, bal2 int
@@ -200,15 +200,15 @@ func (t *SmallBank) sendPayment(stub shim.ChaincodeStubInterface, args []string)
 	}
 	bal_str1, err1 = stub.GetState(accountTab + "_" + args[1])
 	if err1 != nil {
-		stub.PutState(accountTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
+		stub.PutState(accountTab+"_"+args[1], []byte(strconv.Itoa(BALANCE)))
 	}
 	bal_str2, err2 = stub.GetState(checkingTab + "_" + args[1])
 	if err2 != nil {
-		stub.PutState(checkingTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
+		stub.PutState(checkingTab+"_"+args[1], []byte(strconv.Itoa(BALANCE)))
 	}
 	_, err3 = stub.GetState(savingTab + "_" + args[0])
 	if err3 != nil {
-		stub.PutState(savingTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
+		stub.PutState(savingTab+"_"+args[1], []byte(strconv.Itoa(BALANCE)))
 	}
 
 	var bal1, bal2, amount int
