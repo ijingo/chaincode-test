@@ -102,18 +102,17 @@ func (t *SmallBank) almagate(stub shim.ChaincodeStubInterface, args []string) ([
 	err = stub.PutState(savingTab+"_"+args[1], []byte(strconv.Itoa(bal1)))
 
 	if err != nil {
-		fmt.Printf("Error almagate: %s", err)
 		return nil, err
 	}
 	return nil, nil
 }
 
 func (t *SmallBank) getBalance(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	bal_str1, err1 := stub.GetState(accountTab + "_" + args[0])
+	_, err1 := stub.GetState(accountTab + "_" + args[0])
 	if err1 != nil {
 		stub.PutState(accountTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
 	}
-	bal_str2, err2 := stub.GetState(checkingTab + "_" + args[0])
+	_, err2 := stub.GetState(checkingTab + "_" + args[0])
 	if err2 != nil {
 		stub.PutState(checkingTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
 	}
@@ -124,11 +123,11 @@ func (t *SmallBank) getBalance(stub shim.ChaincodeStubInterface, args []string) 
 
 	var bal1, bal2 int
 	var err error
-	bal_str1, err = stub.GetState(savingTab + "_" + args[0])
+	bal_str1, err := stub.GetState(savingTab + "_" + args[0])
 	if err != nil {
 		bal_str1 = []byte(strconv.Itoa(BALANCE))
 	}
-	bal_str2, err = stub.GetState(checkingTab + "_" + args[0])
+	bal_str2, err := stub.GetState(checkingTab + "_" + args[0])
 	if err != nil {
 		bal_str2 = []byte(strconv.Itoa(BALANCE))
 	}
@@ -138,7 +137,6 @@ func (t *SmallBank) getBalance(stub shim.ChaincodeStubInterface, args []string) 
 	bal1 += bal2
 
 	if err != nil {
-		fmt.Printf("Error getBalance: %s", err)
 		return nil, err
 	}
 	return nil, nil
@@ -168,7 +166,6 @@ func (t *SmallBank) updateBalance(stub shim.ChaincodeStubInterface, args []strin
 		err = stub.PutState(checkingTab+"_"+args[0], []byte(strconv.Itoa(bal1)))
 
 		if err != nil {
-			fmt.Printf("Error updateBalance: %s", err)
 			return nil, err
 		}
 		return nil, nil
@@ -200,7 +197,6 @@ func (t *SmallBank) updateSaving(stub shim.ChaincodeStubInterface, args []string
 		err = stub.PutState(savingTab+"_"+args[0], []byte(strconv.Itoa(bal1)))
 
 		if err != nil {
-			fmt.Printf("Error updateSaving: %s", err)
 			return nil, err
 		}
 		return nil, nil
@@ -256,14 +252,12 @@ func (t *SmallBank) sendPayment(stub shim.ChaincodeStubInterface, args []string)
 		err = stub.PutState(checkingTab+"_"+args[0], []byte(strconv.Itoa(bal1)))
 
 		if err != nil {
-			fmt.Printf("Error sendPayment: %s", err)
 			return nil, err
 		}
 
 		err = stub.PutState(checkingTab+"_"+args[1], []byte(strconv.Itoa(bal2)))
 
 		if err != nil {
-			fmt.Printf("Error sendPayment: %s", err)
 			return nil, err
 		}
 		return nil, nil
@@ -299,7 +293,6 @@ func (t *SmallBank) writeCheck(stub shim.ChaincodeStubInterface, args []string) 
 		}
 
 		if err != nil {
-			fmt.Printf("Error writeCheck: %s", err)
 			return nil, err
 		}
 		return nil, nil
