@@ -109,42 +109,39 @@ func (t *SmallBank) almagate(stub shim.ChaincodeStubInterface, args []string) ([
 }
 
 func (t *SmallBank) getBalance(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	bal_str1, err1 := stub.GetState(accountTab + "_" + args[0])
+	if err1 != nil {
+		stub.PutState(accountTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
+	}
+	bal_str2, err2 := stub.GetState(checkingTab + "_" + args[0])
+	if err2 != nil {
+		stub.PutState(checkingTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
+	}
+	_, err3 := stub.GetState(savingTab + "_" + args[0])
+	if err3 != nil {
+		stub.PutState(savingTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
+	}
+
+	var bal1, bal2 int
+	var err error
+	bal_str1, err = stub.GetState(savingTab + "_" + args[0])
+	if err != nil {
+		bal_str1 = []byte(strconv.Itoa(BALANCE))
+	}
+	bal_str2, err = stub.GetState(checkingTab + "_" + args[0])
+	if err != nil {
+		bal_str2 = []byte(strconv.Itoa(BALANCE))
+	}
+
+	bal1, err = strconv.Atoi(string(bal_str1))
+	bal2, err = strconv.Atoi(string(bal_str2))
+	bal1 += bal2
+
+	if err != nil {
+		fmt.Printf("Error getBalance: %s", err)
+		return nil, err
+	}
 	return nil, nil
-	/*
-		bal_str1, err1 := stub.GetState(accountTab + "_" + args[0])
-		if err1 != nil {
-			stub.PutState(accountTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
-		}
-		bal_str2, err2 := stub.GetState(checkingTab + "_" + args[0])
-		if err2 != nil {
-			stub.PutState(checkingTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
-		}
-		_, err3 := stub.GetState(savingTab + "_" + args[0])
-		if err3 != nil {
-			stub.PutState(savingTab+"_"+args[0], []byte(strconv.Itoa(BALANCE)))
-		}
-
-		var bal1, bal2 int
-		var err error
-		bal_str1, err = stub.GetState(savingTab + "_" + args[0])
-		if err != nil {
-			bal_str1 = []byte(strconv.Itoa(BALANCE))
-		}
-		bal_str2, err = stub.GetState(checkingTab + "_" + args[0])
-		if err != nil {
-			bal_str2 = []byte(strconv.Itoa(BALANCE))
-		}
-
-		bal1, err = strconv.Atoi(string(bal_str1))
-		bal2, err = strconv.Atoi(string(bal_str2))
-		bal1 += bal2
-
-		if err != nil {
-			fmt.Printf("Error getBalance: %s", err)
-			return nil, err
-		}
-		return nil, nil
-	*/
 }
 
 func (t *SmallBank) updateBalance(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
