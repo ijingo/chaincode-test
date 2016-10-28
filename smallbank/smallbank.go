@@ -133,12 +133,15 @@ func (t *SmallBank) getBalance(stub shim.ChaincodeStubInterface, args []string) 
 	}
 
 	bal1, err = strconv.Atoi(string(bal_str1))
+	if err != nil {
+		bal1 = BALANCE
+	}
 	bal2, err = strconv.Atoi(string(bal_str2))
+	if err != nil {
+		bal2 = BALANCE
+	}
 	bal1 += bal2
 
-	if err != nil {
-		return nil, err
-	}
 	return nil, nil
 }
 
