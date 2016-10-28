@@ -81,7 +81,13 @@ func (t *SmallBank) almagate(stub shim.ChaincodeStubInterface, args []string) ([
 	var bal1, bal2 int
 	var err error
 	bal_str1, err = stub.GetState(savingTab + "_" + args[0])
+	if err != nil {
+		bal_str1 = []byte(strconv.Itoa(BALANCE))
+	}
 	bal_str2, err = stub.GetState(checkingTab + "_" + args[1])
+	if err != nil {
+		bal_str2 = []byte(strconv.Itoa(BALANCE))
+	}
 
 	bal1, err = strconv.Atoi(string(bal_str1))
 	bal2, err = strconv.Atoi(string(bal_str2))
@@ -118,7 +124,13 @@ func (t *SmallBank) getBalance(stub shim.ChaincodeStubInterface, args []string) 
 	var bal1, bal2 int
 	var err error
 	bal_str1, err = stub.GetState(savingTab + "_" + args[0])
+	if err != nil {
+		bal_str1 = []byte(strconv.Itoa(BALANCE))
+	}
 	bal_str2, err = stub.GetState(checkingTab + "_" + args[0])
+	if err != nil {
+		bal_str2 = []byte(strconv.Itoa(BALANCE))
+	}
 
 	bal1, err = strconv.Atoi(string(bal_str1))
 	bal2, err = strconv.Atoi(string(bal_str2))
@@ -215,7 +227,13 @@ func (t *SmallBank) sendPayment(stub shim.ChaincodeStubInterface, args []string)
 	var err error
 
 	bal_str1, err = stub.GetState(checkingTab + "_" + args[0])
+	if err != nil {
+		bal_str1 = []byte(strconv.Itoa(BALANCE))
+	}
 	bal_str2, err = stub.GetState(checkingTab + "_" + args[1])
+	if err != nil {
+		bal_str2 = []byte(strconv.Itoa(BALANCE))
+	}
 	amount, err = strconv.Atoi(args[2])
 
 	bal1, err = strconv.Atoi(string(bal_str1))
