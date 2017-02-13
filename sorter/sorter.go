@@ -65,7 +65,7 @@ func (t *Sorter) Invoke(stub shim.ChaincodeStubInterface, function string, args 
 		stub.PutState("num", []byte(args[0]))
 	}
 
-	return nil, errors.New("Received unknown function invocation")
+	return nil, errors.New("Received unknown function invocation: " + function)
 }
 
 func (t *Sorter) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
