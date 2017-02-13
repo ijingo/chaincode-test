@@ -63,6 +63,7 @@ func (t *Sorter) Invoke(stub shim.ChaincodeStubInterface, function string, args 
 		}
 		quicksort(slice, 0, num)
 		stub.PutState("num", []byte(args[0]))
+		return nil, nil
 	}
 
 	return nil, errors.New("Received unknown function invocation: " + function)
