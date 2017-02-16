@@ -353,8 +353,7 @@ func query_account(stub shim.ChaincodeStubInterface, args []string) ([]byte, err
 
 func (t *Analytic) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if function == "QueryBlock" {
-		//return query_block(stub, args)
-		return []byte(string("abcdef")), nil
+		return query_block(stub, args)
 	} else if function == "QueryAccount" {
 		return query_account(stub, args)
 	}
