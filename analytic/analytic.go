@@ -273,7 +273,7 @@ func (t *Analytic) Init(stub shim.ChaincodeStubInterface, function string, args 
 		}
 	}
 	// empty pending list
-	err = stub.PutState("pending", []byte(""))
+	err = put_pending(stub, "pending", make([]Transaction, 0))
 	if err != nil {
 		return nil, err
 	}
