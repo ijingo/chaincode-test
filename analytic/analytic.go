@@ -190,7 +190,7 @@ func change_balance(stub shim.ChaincodeStubInterface, acc string, delta int, tip
 
 func commit_txn(stub shim.ChaincodeStubInterface, txn Transaction, tip int) error {
 	var err error
-	err = change_balance(stub, txn.From, txn.Val, tip)
+	err = change_balance(stub, txn.From, -txn.Val, tip)
 	if err != nil {
 		return err
 	}
