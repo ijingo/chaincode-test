@@ -33,7 +33,7 @@ func main() {
 func gen_acc(acc int) string {
 	zeros := "00000000000000000000"
 	str := strconv.Itoa(acc)
-	return "0x" + zeros[0:len(str)] + str
+	return "0x" + zeros[0:(20-len(str))] + str
 }
 
 func get_tip(stub shim.ChaincodeStubInterface) (int, error) {
