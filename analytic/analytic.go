@@ -74,32 +74,20 @@ func put_pending(stub shim.ChaincodeStubInterface, key string, pending_txns []Tr
 	return nil
 }
 
-// 4 args
+// 3 args
 // @arg1 from account
 // @arg2 to account
 // @arg3 value transferred
-// @arg4 block_num
 func send(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	var val, block_num, tip int
+	var val int
 	var err error
 
-	if len(args) != 4 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 4.")
+	if len(args) != 3 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 3.")
 	}
 	val, err = strconv.Atoi(args[2])
 	if err != nil {
 		return nil, errors.New("Expecting integer value for asset holding")
-	}
-	block_num, err = strconv.Atoi(args[3])
-	if err != nil {
-		return nil, errors.New("Expecting integer value for block number")
-	}
-	tip, err = get_tip(stub)
-	if err != nil {
-		return nil, err
-	}
-	if block_num != tip+1 {
-		return nil, errors.New("Do not send transaction belongs to old block.")
 	}
 	var pending_txns []Transaction
 	pending_txns, err = get_pending(stub)
@@ -351,11 +339,59 @@ func query_account(stub shim.ChaincodeStubInterface, args []string) ([]byte, err
 	return []byte(strconv.Itoa(ret)), nil
 }
 
+// @arg1 account
+// @arg2 start_block
+// @arg3 end_block
+func range_account(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	var err error
+	var tip, start_blk, end_blk int
+	req_acc := args[0]
+	tip, err = get_tip(stub)
+	if err != nil {
+		return nil, err
+	}
+	start_blk, err = strconv.Atoi(args[1])
+	if err != nil {
+		return nil, errors.New("Expect integer block number")
+	}
+	end_blk, err = strconv.Atoi(args[2])
+	if err != nil {
+		return nil, errors.New("Expect integer block number")
+	}
+	if end_blk > tip || start_blk > end_blk {
+		return nil, errors.New("Invalid block number")
+	}
+	var version int
+	version, err = get_latest_version(stub, req_acc)
+	if err != nil {
+		return nil, err
+	}
+	var balance AccountBalance
+	balance, err = get_balance(stub, req_acc, version)
+	if err != nil {
+		return nil, err
+	}
+	ret := -1
+	for balance.StartBlock >= start_blk {
+		version--
+		balance, err = get_balance(stub, req_acc, version)
+		if err != nil {
+			return nil, err
+		}
+		if balance.Val > ret && balance.StartBlock >= start_blk && balance.StartBlock <= end_blk {
+			ret = balance.Val
+		}
+	}
+	return []byte(strconv.Itoa(ret)), nil
+}
+
 func (t *Analytic) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if function == "QueryBlock" {
 		return query_block(stub, args)
 	} else if function == "QueryAccount" {
 		return query_account(stub, args)
+	} else if function == "RangeAccount" {
+		return range_account(stub, args)
 	}
 	return nil, errors.New("Received unknown function query")
 }
