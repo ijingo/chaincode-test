@@ -323,18 +323,20 @@ func query_account(stub shim.ChaincodeStubInterface, args []string) ([]byte, err
 		return nil, err
 	}
 	var balance AccountBalance
-	balance, err = get_balance(stub, req_acc, version)
-	if err != nil {
-		return nil, err
-	}
-	ret := balance.Val
-	for balance.StartBlock > req_blk {
-		version--
-		balance, err = get_balance(stub, req_acc, version)
+	l, r := 0, version
+	ret := -1
+	for l <= r {
+		mid := (l + r) / 2
+		balance, err = get_balance(stub, req_acc, mid)
 		if err != nil {
 			return nil, err
 		}
-		ret = balance.Val
+		if balance.StartBlock <= req_blk {
+			l = mid + 1
+			ret = balance.Val
+		} else {
+			r = mid - 1
+		}
 	}
 	return []byte(strconv.Itoa(ret)), nil
 }
